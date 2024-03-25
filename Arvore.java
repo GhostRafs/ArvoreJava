@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class Node {  
+class Node {
     int data;
     Node left, right;
 
@@ -46,7 +46,7 @@ public class Arvore {
         while (true) {
             System.out.println("Menu:");
             System.out.println("1 Mostrar nível de um determinado nó");
-            System.out.println("2 Nível da árvore");    
+            System.out.println("2 Nível da árvore");
             System.out.println("3 Mostrar nós e suas profundidades");
             System.out.println("4 Mostrar profundidade da árvore");
             System.out.println("5 Mostrar altura de cada nó");
@@ -114,4 +114,3 @@ public class Arvore {
         }
     }
 }
-// viado
