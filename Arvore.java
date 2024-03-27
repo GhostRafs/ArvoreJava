@@ -1,116 +1,110 @@
-import java.util.Scanner;
-
-class Node {
-    int data;
-    Node left, right;
-
-    Node(int value) {
-        data = value;
-        left = right = null;
-    }
-}
-
 public class Arvore {
-    static void imprimirArvore(Node node) {
-        if (node != null) {
-            imprimirArvore(node.left);
-            System.out.println(node.data + " ");
-            imprimirArvore(node.right);
+    No raiz = null; // Declaração da raiz da árvore
+
+    Arvore() {
+    }
+
+    public void insereValor(int valor) {
+        if (this.raiz == null) { // Se a árvore estiver vazia, o novo nó será a raiz
+            this.raiz = new No(valor);
+        } else {
+            this.raiz = this.insereFilho(this.raiz, valor); // Caso contrário, chama a função recursiva para inserir o valor
         }
     }
 
-    static void inserir(Node node, int valor) {
-        if (node != null) {
-            if (valor < node.data) {
-                if (node.left != null) {
-                    inserir(node.left, valor);
-                } else {
-                    System.out.println("Inserindo " + valor + " à esquerda de " + node.data);
-                    node.left = new Node(valor);
-                }
-            } else if (valor > node.data) {
-                if (node.right != null) {
-                    inserir(node.right, valor);
-                } else {
-                    System.out.println("Inserindo " + valor + " à direita de " + node.data);
-                    node.right = new Node(valor);
-                }
+    public No insereFilho(No no, int valor) {
+        if (no == null) {
+            return new No(valor); // Se o nó for nulo, cria um novo nó com o valor
+        } else {
+            if (valor < no.valor) { // Se o valor for menor que o valor do nó atual, insere na subárvore esquerda
+                no.esquerda = this.insereFilho(no.esquerda, valor);
+            } else if (valor > no.valor) { // Se o valor for maior que o valor do nó atual, insere na subárvore direita
+                no.direita = this.insereFilho(no.direita, valor);
             }
+            return no;
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Node root = null;
+    // Método para calcular o nível de profundidade de um determinado valor na árvore
+    public int nivelProfundidadeNo(int valor) {
+        return this.raiz.valor == valor ? 0 : this.nivelProfundidadeFilho(this.raiz, valor, 0);
+    }
 
-        while (true) {
-            System.out.println("Menu:");
-            System.out.println("1 Mostrar nível de um determinado nó");
-            System.out.println("2 Nível da árvore");
-            System.out.println("3 Mostrar nós e suas profundidades");
-            System.out.println("4 Mostrar profundidade da árvore");
-            System.out.println("5 Mostrar altura de cada nó");
-            System.out.println("6 Mostrar altura da árvore");
-            System.out.println("7 Impressão da árvore com identação");
-            System.out.println("8 Inserir um valor na árvore");
-            System.out.println("0 Sair");
-
-            System.out.print("Escolha uma opção: ");
-            char option = scanner.next().charAt(0);
-
-            switch (option) {
-                case '1':
-                    // Implementar a lógica para mostrar o nível de um determinado nó
-                    break;
-
-                case '2':
-                    // Implementar a lógica para mostrar o nível da árvore
-                    break;
-
-                case '3':
-                    // Implementar a lógica para mostrar os nós e suas profundidades
-                    break;
-
-                case '4':
-                    // Implementar a lógica para mostrar a profundidade da árvore
-                    break;
-
-                case '5':
-                    // Implementar a lógica para mostrar a altura de cada nó
-                    break;
-
-                case '6':
-                    // Implementar a lógica para mostrar a altura da árvore
-                    break;
-
-                case '7':
-                    // Chamar a função de impressão da árvore com identação
-                    System.out.println("Árvore com identação:");
-                    imprimirArvore(root);
-                    System.out.println();
-                    break;
-
-                case '8':
-                    // Chamar a função de inserção de um valor na árvore
-                    System.out.print("Digite o valor a ser inserido: ");
-                    int value = scanner.nextInt();
-                    if (root == null) {
-                        root = new Node(value);
-                        System.out.println("Árvore criada com raiz " + value);
-                    } else {
-                        inserir(root, value);
-                    }
-                    break;
-
-                case '0':
-                    System.out.println("Encerrando o programa.");
-                    scanner.close();
-                    System.exit(0);
-                    break;
-
-                default:
-                    System.out.println("Opção inválida. Tente novamente.");
+    // Método auxiliar para calcular o nível de profundidade de um valor recursivamente
+    public int nivelProfundidadeFilho(No no, int valor, int niveleprofundidade) {
+        if (no == null) {
+            return -1; // Se o nó for nulo, retorna -1
+        } else if (no.valor == valor) {
+            return niveleprofundidade; // Se encontrar o valor, retorna o nível de profundidade
+        } else {
+            if (no.valor > valor) { // Se o valor for menor que o valor do nó atual, verifica na subárvore esquerda
+                niveleprofundidade = this.nivelProfundidadeFilho(no.esquerda, valor, niveleprofundidade + 1);
+            } else {
+                niveleprofundidade = this.nivelProfundidadeFilho(no.direita, valor, niveleprofundidade + 1); // Caso contrário, verifica na subárvore direita
             }
+            return niveleprofundidade;
+        }
+    }
+
+    // Método para calcular a altura da árvore
+    public int nivelProfundidadeAlturaArvore() {
+        return this.verificaProfundidade(this.raiz, -1);
+    }
+
+    // Método auxiliar para calcular a altura da árvore recursivamente
+    public int verificaProfundidade(No no, int valor) {
+        if (no == null) {
+            return valor; // Se o nó for nulo, retorna o valor atual (inicializado como -1)
+        } else {
+            int esquerda = this.verificaProfundidade(no.esquerda, valor + 1); // Verifica a altura na subárvore esquerda
+            int direita = this.verificaProfundidade(no.direita, valor + 1); // Verifica a altura na subárvore direita
+            return esquerda > direita ? esquerda : direita; // Retorna a maior altura entre as subárvores
+        }
+    }
+
+    // Método para calcular a altura de um determinado valor na árvore
+    public int alturaNo(int valor) {
+        return this.buscaNo(this.raiz, valor);
+    }
+
+    // Método auxiliar para calcular a altura de um determinado valor na árvore recursivamente
+    public int buscaNo(No no, int valor) {
+        if (no == null) {
+            return -1; // Se o nó for nulo, retorna -1
+        } else if (no.valor == valor) {
+            return this.verificaAlturaFilho(no, -1); // Se encontrar o valor, retorna a altura do nó
+        } else if (no.valor > valor) { // Se o valor for menor que o valor do nó atual, verifica na subárvore esquerda
+            return this.buscaNo(no.esquerda, valor);
+        } else {
+            return no.valor < valor ? this.buscaNo(no.direita, valor) : -1; // Caso contrário, verifica na subárvore direita
+        }
+    }
+
+    // Método auxiliar para calcular a altura de um nó recursivamente
+    public int verificaAlturaFilho(No no, int altura) {
+        if (no == null) {
+            return altura; // Se o nó for nulo, retorna a altura atual
+        } else {
+            int esquerda = this.verificaAlturaFilho(no.esquerda, altura + 1); // Verifica a altura na subárvore esquerda
+            int direita = this.verificaAlturaFilho(no.direita, altura + 1); // Verifica a altura na subárvore direita
+            return esquerda > direita ? esquerda : direita; // Retorna a maior altura entre as subárvores
+        }
+    }
+
+    // Método para imprimir a árvore em ordem
+    public void imprimeArvore() {
+        this.imprimeArvoreFormatada(this.raiz, 0);
+    }
+
+    // Método auxiliar para imprimir a árvore em ordem formatada
+    public void imprimeArvoreFormatada(No no, int posicao) {
+        if (no != null) {
+            this.imprimeArvoreFormatada(no.direita, posicao + 1); // Imprime a subárvore direita
+            for(int i = 0; i < posicao; ++i) {
+                System.out.print("\t"); // Imprime espaços para formatar a árvore
+            }
+            System.out.println(no.valor); // Imprime o valor do nó atual
+            this.imprimeArvoreFormatada(no.esquerda, posicao + 1); // Imprime a subárvore esquerda
         }
     }
 }
