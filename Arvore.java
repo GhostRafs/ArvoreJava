@@ -107,4 +107,10 @@ public class Arvore {
             this.imprimeArvoreFormatada(no.esquerda, posicao + 1); // Imprime a subárvore esquerda
         }
     }
+    // Método em ordem pegando os valores Left- Node - Right(esquerda, nó, direita)
+    public void in_ordem(No no){
+        if (no.esquerda != null){
+            System.out.print("Hello World");
+        }
+    }
 }
